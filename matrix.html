@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>IV Comparison Matrix</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="matrix.css" />
+  </head>
+  <body>
+    <nav class="page-nav">
+      <a href="index.html" class="page-nav-link">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h14M3 10l4-4M3 10l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/><rect x="9" y="4" width="8" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        I-V Viewer
+      </a>
+      <a href="matrix.html" class="page-nav-link active" aria-current="page">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="2" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="11" y="2" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="11" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="11" y="11" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        Comparison Matrix
+      </a>
+    </nav>
+    <main class="shell">
+      <section class="layout matrix-layout">
+        <article class="scope-card matrix-card">
+          <canvas id="matrixCanvas" aria-label="Mushristor I-V comparison matrix"></canvas>
+        </article>
+
+        <aside class="control-panel">
+          <div class="panel-heading">
+            <p class="eyebrow">Controls</p>
+          </div>
+
+          <div class="control-grid">
+            <label class="control">
+              <span>X Axis</span>
+              <select id="xAxisSelect">
+                <option value="waveform">Waveform</option>
+                <option value="frequencyHz" selected>Frequency</option>
+                <option value="vppSetting">Voltage</option>
+                <option value="rShuntOhms">Ballast Resistance</option>
+              </select>
+            </label>
+
+            <label class="control">
+              <span>Y Axis</span>
+              <select id="yAxisSelect">
+                <option value="waveform" selected>Waveform</option>
+                <option value="frequencyHz">Frequency</option>
+                <option value="vppSetting">Voltage</option>
+                <option value="rShuntOhms">Ballast Resistance</option>
+              </select>
+            </label>
+          </div>
+
+          <label class="control" id="xSamplesControl">
+            <span>
+              X Samples
+              <output id="xSamplesValue"></output>
+            </span>
+            <input id="xSamplesSlider" type="range" min="2" max="6" step="1" value="4" />
+          </label>
+
+          <label class="control" id="ySamplesControl">
+            <span>
+              Y Samples
+              <output id="ySamplesValue"></output>
+            </span>
+            <input id="ySamplesSlider" type="range" min="2" max="6" step="1" value="4" />
+          </label>
+
+          <div class="control">
+            <span>Display Mode</span>
+            <div class="mode-buttons" aria-label="Display Mode">
+              <button class="mode-button" type="button" data-display-mode="trueIv" aria-pressed="true">
+                True I-V: CH1 vs (CH2 - CH1) / R
+              </button>
+              <button class="mode-button" type="button" data-display-mode="scopeXy" aria-pressed="false">
+                Scope XY: CH1 vs CH2
+              </button>
+            </div>
+          </div>
+
+          <div class="control hidden" id="fixedWaveformControl">
+            <span>Waveform</span>
+            <div class="waveform-switcher fixed-waveform-switcher" aria-label="Fixed waveform selector">
+              <button class="waveform-button fixed-waveform-button" type="button" data-fixed-waveform="sine" aria-pressed="true">
+                <span>Sine</span>
+                <svg viewBox="0 0 42 18" aria-hidden="true" draggable="false">
+                  <path d="M1 14 C11 2, 31 2, 41 14" />
+                </svg>
+              </button>
+              <button class="waveform-button fixed-waveform-button" type="button" data-fixed-waveform="triangle" aria-pressed="false">
+                <span>Triangle</span>
+                <svg viewBox="0 0 42 18" aria-hidden="true" draggable="false">
+                  <polyline points="1,16 21,2 41,16" />
+                </svg>
+              </button>
+              <button class="waveform-button fixed-waveform-button" type="button" data-fixed-waveform="sawtooth" aria-pressed="false">
+                <span>Sawtooth</span>
+                <svg viewBox="0 0 42 18" aria-hidden="true" draggable="false">
+                  <polyline points="1,16 37,2 37,16" />
+                </svg>
+              </button>
+              <button class="waveform-button fixed-waveform-button" type="button" data-fixed-waveform="square" aria-pressed="false">
+                <span>Square</span>
+                <svg viewBox="0 0 42 18" aria-hidden="true" draggable="false">
+                  <polyline points="1,16 1,4 32,4 32,16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <label class="control hidden" id="fixedFrequencyControl">
+            <span>
+              Frequency
+              <output id="fixedFrequencyValue"></output>
+            </span>
+            <input id="fixedFrequencySlider" type="range" />
+          </label>
+
+          <label class="control hidden" id="fixedVoltageControl">
+            <span>
+              Voltage
+              <output id="fixedVoltageValue"></output>
+            </span>
+            <input id="fixedVoltageSlider" type="range" />
+          </label>
+
+          <label class="control hidden" id="fixedShuntControl">
+            <span>
+              Ballast Resistance
+              <output id="fixedShuntValue"></output>
+            </span>
+            <input id="fixedShuntSlider" type="range" />
+          </label>
+
+          <label class="control">
+            <span>Animate Third Variable</span>
+            <select id="modulationSelect"></select>
+          </label>
+
+          <label class="control hidden" id="modulationControl">
+            <span>
+              <span id="modulationLabel">Sweep</span>
+              <output id="modulationValue"></output>
+            </span>
+            <input id="modulationSlider" type="range" />
+          </label>
+
+          <div class="inline-toggles matrix-toggles" aria-label="Matrix display options">
+            <label id="playModulationWrap" class="hidden">
+              <input id="playModulation" type="checkbox" />
+              <span>Sweep</span>
+            </label>
+            <label>
+              <input id="showGrid" type="checkbox" />
+              <span>Grid</span>
+            </label>
+            <label>
+              <input id="showAxes" type="checkbox" />
+              <span>Axes</span>
+            </label>
+            <label>
+              <input id="showCursor" type="checkbox" />
+              <span>Cursor</span>
+            </label>
+          </div>
+
+          <label class="toggle-row">
+            <input id="smoothTrace" type="checkbox" checked />
+            <span>Smooth measured noise</span>
+          </label>
+        </aside>
+      </section>
+    </main>
+
+    <script src="data/triangle_hydrated.js"></script>
+    <script src="data/sine_hydrated.js"></script>
+    <script src="data/sawtooth_hydrated.js"></script>
+    <script src="data/square_hydrated.js"></script>
+    <script src="matrix.js"></script>
+  </body>
+</html>
