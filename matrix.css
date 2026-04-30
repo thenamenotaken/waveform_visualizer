@@ -1,0 +1,50 @@
+.matrix-layout {
+  height: calc(100dvh - clamp(20px, 4vh, 48px));
+}
+
+.matrix-card {
+  min-height: 0;
+  display: flex;
+}
+
+#matrixCanvas {
+  display: block;
+  flex: 1 1 auto;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  background: #030609;
+}
+
+.control-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.control-grid .control {
+  margin: 0;
+}
+
+.fixed-waveform-switcher {
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.fixed-waveform-button {
+  font-size: 0.82rem;
+}
+
+.matrix-toggles {
+  margin-top: 14px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@media (max-width: 1180px) {
+  .control-grid {
+    grid-template-columns: 1fr;
+  }
+}
